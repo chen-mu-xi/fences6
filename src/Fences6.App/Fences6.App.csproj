@@ -1,60 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\</BaseIntermediateOutputPath>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
-    <LangVersion>preview</LangVersion>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
-    <AssemblyName>Fences6.App</AssemblyName>
+    <AssemblyName>Fences6</AssemblyName>
     <RootNamespace>Fences6.App</RootNamespace>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <!-- NuGet Package Reference -->
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
-  </ItemGroup>
-
-  <!-- Reference to Core library -->
-  <ItemGroup>
-    <ProjectReference Include="..\Fences6.Core\Fences6.Core.vcxproj">
-      <Project>{b2c3d4e5-f6a7-8901-bcde-f12345678901}</Project>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ApplicationDefinition Update="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <XamlRuntime>Wpf</XamlRuntime>
-    </ApplicationDefinition>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <XamlRuntime>Wpf</XamlRuntime>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\**\*" />
   </ItemGroup>
 </Project>

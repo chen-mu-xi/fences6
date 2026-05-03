@@ -1,0 +1,93 @@
+<Window x:Class="Fences6.App.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Fences 6 - 设置"
+        Height="500" Width="600"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{StaticResource BackgroundBrush}">
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0" Text="设置" FontSize="24" FontWeight="Bold" 
+                   Foreground="{StaticResource TextBrush}" Margin="0,0,0,20"/>
+        
+        <!-- 设置内容 -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- 常规设置 -->
+                <GroupBox Header="常规" Margin="0,0,0,16">
+                    <StackPanel Margin="8">
+                        <CheckBox x:Name="chkStartWithWindows" Content="开机自动启动" Margin="0,4"/>
+                        <CheckBox x:Name="chkMinimizeToTray" Content="最小化到系统托盘" Margin="0,4"/>
+                        <CheckBox x:Name="chkShowNotifications" Content="显示通知" Margin="0,4"/>
+                    </StackPanel>
+                </GroupBox>
+                
+                <!-- 布局设置 -->
+                <GroupBox Header="布局" Margin="0,0,0,16">
+                    <StackPanel Margin="8">
+                        <CheckBox x:Name="chkAutoArrange" Content="自动排列图标" Margin="0,4"/>
+                        <CheckBox x:Name="chkSnapToEdges" Content="吸附到边缘" Margin="0,4"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,4">
+                            <TextBlock Text="网格大小:" VerticalAlignment="Center" Width="100"/>
+                            <Slider x:Name="sldGridSize" Minimum="5" Maximum="50" 
+                                    Width="200" Value="25" TickFrequency="5" IsSnapToTickEnabled="True"/>
+                            <TextBlock Text="{Binding Value, ElementName=sldGridSize, StringFormat={}{0}px}" 
+                                       Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                
+                <!-- 外观设置 -->
+                <GroupBox Header="外观" Margin="0,0,0,16">
+                    <StackPanel Margin="8">
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Text="透明度:" VerticalAlignment="Center" Width="100"/>
+                            <Slider x:Name="sldOpacity" Minimum="30" Maximum="100" 
+                                    Width="200" Value="100"/>
+                            <TextBlock Text="{Binding Value, ElementName=sldOpacity, StringFormat={}{0}%}" 
+                                       Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,4">
+                            <TextBlock Text="主题:" VerticalAlignment="Center" Width="100"/>
+                            <ComboBox x:Name="cmbTheme" Width="150">
+                                <ComboBoxItem Content="浅色" IsSelected="True"/>
+                                <ComboBoxItem Content="深色"/>
+                                <ComboBoxItem Content="跟随系统"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                
+                <!-- 热键设置 -->
+                <GroupBox Header="快捷键" Margin="0,0,0,16">
+                    <StackPanel Margin="8">
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Text="显示/隐藏:" VerticalAlignment="Center" Width="100"/>
+                            <TextBox x:Name="txtHotkey" Text="Win+Shift+F" Width="150" IsReadOnly="True"
+                                     Background="{StaticResource BackgroundBrush}"/>
+                            <Button Content="设置" Margin="8,0,0,0" Padding="12,4"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <!-- 按钮 -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="取消" Width="80" Margin="0,0,8,0" Click="CancelButton_Click"/>
+            <Button Content="保存" Width="80" Background="{StaticResource PrimaryBrush}" 
+                    Foreground="White" Click="SaveButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

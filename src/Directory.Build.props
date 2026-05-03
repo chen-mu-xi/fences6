@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+    Directory.Build.props - 解决方案级构建配置
+    自动应用到所有子项目
+  -->
+  
+  <PropertyGroup>
+    <!-- 基础配置 -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <PlatformTarget Condition=" '$(Platform)' == 'AnyCPU' ">x64</PlatformTarget>
+    
+    <!-- .NET 6 配置 -->
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- C++ 配置 -->
+    <CppLanguageStandard>stdcpp17</CppLanguageStandard>
+    <C++LanguageStandard_CLR>stdcppcli</C++LanguageStandard_CLR>
+    
+    <!-- 输出配置 -->
+    <OutputPath>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    
+    <!-- 警告处理 -->
+    <TreatWarningAsError>false</TreatWarningAsError>
+    <WarningLevel>3</WarningLevel>
+    
+    <!-- Windows SDK -->
+    <UseWindowsSdkPackages>true</UseWindowsSdkPackages>
+  </PropertyGroup>
+  
+  <!-- Release 配置优化 -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
+  <!-- Debug 配置 -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
+</Project>

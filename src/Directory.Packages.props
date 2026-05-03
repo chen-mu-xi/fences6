@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+    Directory.Packages.props - 集中式 NuGet 包版本管理
+    使用 PackageReference 版本浮动
+  -->
+  
+  <PropertyGroup>
+    <!-- 启用中央包管理 -->
+    <CentralPackageVersionsEnabled>true</CentralPackageVersionsEnabled>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  
+  <!-- NuGet 包版本定义 -->
+  <ItemGroup>
+    <!-- .NET 运行时和工具 -->
+    <PackageVersion Include="Microsoft.NETCore.Platforms" Version="8.0.0" />
+    
+    <!-- Windows SDK -->
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
+    <PackageVersion Include="Microsoft.Windows.CppWinRT" Version="2.0.240111.0" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+    
+    <!-- WPF 和 XAML -->
+    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    
+    <!-- 依赖注入 -->
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    
+    <!-- 数据库 -->
+    <PackageVersion Include="System.Data.SQLite.Core" Version="1.0.118" />
+    
+    <!-- 系统托盘 -->
+    <PackageVersion Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    
+    <!-- 日志 -->
+    <PackageVersion Include="Serilog" Version="3.1.1" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    
+    <!-- JSON 序列化 -->
+    <PackageVersion Include="System.Text.Json" Version="8.0.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    
+    <!-- 测试 -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="xUnit" Version="2.6.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.4" />
+    <PackageVersion Include="Moq" Version="4.20.70" />
+  </ItemGroup>
+  
+</Project>

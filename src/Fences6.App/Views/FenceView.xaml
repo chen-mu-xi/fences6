@@ -1,0 +1,233 @@
+<UserControl x:Class="Fences6.App.Views.FenceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Fences6.App.ViewModels"
+             xmlns:converters="clr-namespace:Fences6.App.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=vm:FenceViewModel}"
+             Width="{Binding Bounds.Width}"
+             Height="{Binding Bounds.Height}">
+    
+    <UserControl.Resources>
+        <!-- 图标项模板 -->
+        <DataTemplate x:Key="IconItemTemplate" DataType="{x:Type vm:IconViewModel}">
+            <Border Width="64" Height="72" Margin="4" Background="Transparent" 
+                    Cursor="Hand" ToolTip="{Binding Name}">
+                <Border.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" 
+                                  Command="{Binding DataContext.OpenIconCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                  CommandParameter="{Binding}"/>
+                </Border.InputBindings>
+                <StackPanel HorizontalAlignment="Center">
+                    <!-- 图标 -->
+                    <Border Width="48" Height="48" CornerRadius="4" 
+                            Background="#2D2D30" Margin="0,0,0,4">
+                        <Image Source="{Binding Path}" Stretch="Uniform" 
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               Margin="4"/>
+                    </Border>
+                    <!-- 名称 -->
+                    <TextBlock Text="{Binding Name}" 
+                               Foreground="White" 
+                               FontSize="11" 
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               MaxWidth="60"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        
+        <!-- 拖拽装饰器样式 -->
+        <Style x:Key="SelectionBorderStyle" TargetType="Border">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#2D7DD2"/>
+            <Setter Property="Margin" Value="-2"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
+    <!-- Fence 分组容器 -->
+    <Grid>
+        <!-- 选中状态边框 -->
+        <Border Style="{StaticResource SelectionBorderStyle}" 
+                IsHitTestVisible="False"/>
+        
+        <!-- 主内容边框 -->
+        <Border x:Name="MainBorder"
+                Background="{Binding BackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                BorderBrush="#3F3F46" 
+                BorderThickness="1" 
+                CornerRadius="6"
+                Opacity="{Binding Opacity}">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.25"/>
+            </Border.Effect>
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!-- 标题栏 -->
+                <Border Grid.Row="0" 
+                        Background="#2D2D30" 
+                        CornerRadius="6,6,0,0"
+                        MouseLeftButtonDown="Header_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Header_MouseLeftButtonUp"
+                        MouseMove="Header_MouseMove">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- 拖拽手柄图标 -->
+                        <TextBlock Grid.Column="0" Text="☰" 
+                                   Foreground="#808080" 
+                                   FontSize="10" 
+                                   VerticalAlignment="Center" 
+                                   Margin="8,0,4,0"
+                                   Cursor="SizeAll"/>
+                        
+                        <!-- 分组名称 -->
+                        <TextBlock x:Name="TitleText" 
+                                   Grid.Column="1"
+                                   Text="{Binding Name}" 
+                                   Foreground="White" 
+                                   FontSize="12" 
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center" 
+                                   Margin="4,0"
+                                   Cursor="IBeam">
+                            <TextBlock.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" 
+                                              Command="{Binding StartEditingCommand}"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                        
+                        <!-- 编辑模式下的文本框 -->
+                        <TextBox x:Name="TitleTextBox"
+                                 Grid.Column="1"
+                                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Visibility="Collapsed"
+                                 FontSize="12" 
+                                 FontWeight="SemiBold"
+                                 Background="#3E3E42"
+                                 Foreground="White"
+                                 BorderThickness="0"
+                                 VerticalAlignment="Center"
+                                 Margin="4,0"
+                                 LostFocus="TitleTextBox_LostFocus"
+                                 KeyDown="TitleTextBox_KeyDown"/>
+                        
+                        <!-- 操作按钮 -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,4,0">
+                            <!-- 固定/取消固定按钮 -->
+                            <Button x:Name="PinButton" 
+                                    Content="📌" 
+                                    Width="24" Height="24"
+                                    Background="Transparent" 
+                                    BorderThickness="0"
+                                    FontSize="12"
+                                    ToolTip="固定此分组"
+                                    Click="PinButton_Click"/>
+                            
+                            <!-- 菜单按钮 -->
+                            <Button Content="⋮" 
+                                    Width="24" Height="24"
+                                    Background="Transparent" 
+                                    BorderThickness="0"
+                                    Foreground="White"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    ToolTip="更多选项"
+                                    Click="MenuButton_Click">
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="重命名" Command="{Binding StartEditingCommand}"/>
+                                        <MenuItem Header="更改图标大小" Click="ChangeIconSize_Click"/>
+                                        <MenuItem Header="更改背景色" Click="ChangeBackground_Click"/>
+                                        <Separator/>
+                                        <MenuItem Header="锁定分组" Click="LockFence_Click"/>
+                                        <MenuItem Header="删除分组" Command="{Binding DeleteCommand}"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                
+                <!-- 图标区域 -->
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto" 
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="4">
+                    <ItemsControl x:Name="IconGrid"
+                                  ItemsSource="{Binding Icons}"
+                                  ItemTemplate="{StaticResource IconItemTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+                
+                <!-- 空状态提示 -->
+                <TextBlock Grid.Row="1"
+                           Text="拖拽图标到此处或双击添加"
+                           Foreground="#606060"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Visibility="{Binding IconCount, Converter={StaticResource ZeroToVisibilityConverter}}"/>
+                
+                <!-- 调整大小手柄 -->
+                <Thumb x:Name="ResizeThumb" 
+                       Width="16" Height="16"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Bottom"
+                       Cursor="SizeNWSE"
+                       Background="Transparent"
+                       DragDelta="ResizeThumb_DragDelta"
+                       Opacity="0.5">
+                    <Thumb.Template>
+                        <ControlTemplate TargetType="Thumb">
+                            <Grid Background="Transparent">
+                                <Path Data="M 0,16 L 16,0 M 6,16 L 16,6 M 12,16 L 16,12" 
+                                      Stroke="#808080" 
+                                      StrokeThickness="1"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Bottom"
+                                      Margin="0,0,2,2"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Thumb.Template>
+                </Thumb>
+            </Grid>
+        </Border>
+        
+        <!-- 锁定状态遮罩 -->
+        <Border Background="#80000000" 
+                CornerRadius="6"
+                Visibility="{Binding IsLocked, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="🔒 已锁定" 
+                       Foreground="White" 
+                       FontSize="14"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"/>
+        </Border>
+    </Grid>
+</UserControl>

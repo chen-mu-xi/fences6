@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\</BaseIntermediateOutputPath>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectType>native</ProjectType>
+    <TargetFrameworkVersion>v143</TargetFrameworkVersion>
+    <WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <RootNamespace>Fences6.Native</RootNamespace>
+    <AssemblyName>Fences6.Native</AssemblyName>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" />
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" />
+
+  <ItemGroup>
+    <ClInclude Include="FileWatcher.h" />
+    <ClInclude Include="DesktopIntegration.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="FileWatcher.cpp" />
+    <ClCompile Include="DesktopIntegration.cpp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Library Include="Shcore.lib" />
+    <Library Include="User32.lib" />
+    <Library Include="Kernel32.lib" />
+    <Library Include="Advapi32.lib" />
+    <Library Include="Shell32.lib" />
+    <Library Include="Ole32.lib" />
+    <Library Include="Oleaut32.lib" />
+    <Library Include="Comdlg32.lib" />
+    <Library Include="Gdi32.lib" />
+    <Library Include="Dwmapi.lib" />
+    <Library Include="Uxtheme.lib" />
+  </ItemGroup>
+</Project>

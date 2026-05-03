@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\</BaseIntermediateOutputPath>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <WindowsSdkPackageVersion>10.0.19041.41</WindowsSdkPackageVersion>
+    <CLRSupport>true</CLRSupport>
+    <CLRSupport>OldSyntax</CLRSupport>
+    <C++LanguageStandard>stdcpp17</C++LanguageStandard>
+    <C++LanguageStandard_CLR>stdcppcli</C++LanguageStandard_CLR>
+    <CommonLanguageRuntimeSupport>true</CommonLanguageRuntimeSupport>
+    <RootNamespace>Fences6.Core</RootNamespace>
+    <AssemblyName>Fences6.Core</AssemblyName>
+    <WindowsAppSDKFoundationPackageVersion>1.4.231115000</WindowsAppSDKFoundationPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" />
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" />
+
+  <!-- NuGet Package Reference -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CppWinRT" Version="2.0.240111.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="FenceCore.h" />
+    <ClInclude Include="LayoutEngine.h" />
+    <ClInclude Include="RuleEngine.h" />
+    <ClInclude Include="ConfigManager.h" />
+    <ClInclude Include="HotkeyManager.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="FenceCore.cpp" />
+    <ClCompile Include="LayoutEngine.cpp" />
+    <ClCompile Include="RuleEngine.cpp" />
+    <ClCompile Include="ConfigManager.cpp" />
+    <ClCompile Include="HotkeyManager.cpp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+</Project>

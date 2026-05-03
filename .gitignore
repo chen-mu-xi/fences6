@@ -1,0 +1,139 @@
+# ===========================================
+# Fences6 .gitignore
+# ===========================================
+
+# Build Results
+#####################
+bin/
+obj/
+out/
+publish/
+dist/
+test-publish/
+artifacts/
+
+# NuGet
+#####################
+*.nupkg
+*.snupkg
+packages/
+nuget.config
+
+# Visual Studio / Rider
+#####################
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.opensdf
+*.sdf
+.idea/
+*.sln.iml
+*.rsuser
+*.dotSettings
+*.CodeAnalysisLog.xml
+*.kt
+
+# Build Logs
+#####################
+*.log
+build.log
+*.tmp
+
+# OS Files
+#####################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Release Archives
+#####################
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Executables (except published ones)
+#####################
+*.exe
+*.dll
+*.so
+*.dylib
+*.pdb
+*.mdb
+*.exe.config
+
+# Exceptions for published builds
+#####################
+!/publish/*.exe
+!/publish/*.dll
+!/dist/*.exe
+!/dist/*.dll
+
+# C++ Build Artifacts
+#####################
+*.obj
+*.pch
+*.idb
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.manifest
+*.res
+*.resources
+ipch/
+Debug/
+Release/
+x64/
+Win32/
+ARM/
+ARM64/
+
+# Test Results
+#####################
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Temporary Files
+#####################
+*.tmp
+*.temp
+~*
+*~
+*.bak
+*.orig
+
+# Database
+#####################
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.mdf
+*.ldf
+
+# Config with secrets (local override)
+#####################
+appsettings.local.json
+appsettings.*.local.json
+secrets.json
+
+# CI/CD
+#####################
+.github/
+!.github/workflows/
+
+# Docker
+#####################
+container/
+Dockerfile*
+docker-compose*.yml
+.dockerignore

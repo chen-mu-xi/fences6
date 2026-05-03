@@ -85,7 +85,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Build C++ Native Library
-      if: exists('./src/Fences6.Native')
+      if: fileExists('./src/Fences6.Native')
       shell: pwsh
       run: |
         $projectPath = "./src/Fences6.Native/Fences6.Native.vcxproj"
@@ -101,7 +101,7 @@ jobs:
         }
     
     - name: Upload Native Artifacts
-      if: exists('./src/Fences6.Native')
+      if: fileExists('./src/Fences6.Native')
       uses: actions/upload-artifact@v4
       with:
         name: Fences6.Native-${{ matrix.architecture }}

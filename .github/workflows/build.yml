@@ -3,15 +3,7 @@ name: Build Fences6
 on:
   push:
     branches: [ main ]
-    tags:
-      - 'v*'
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
-
-env:
-  DOTNET_VERSION: '8.0.x'
-  BUILD_CONFIGURATION: Release
 
 jobs:
   build:
@@ -24,41 +16,22 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+        dotnet-version: '8.0.x'
     
-    - name: Restore NuGet packages
-      run: dotnet restore
+    - name: Restore
+      run: dotnet restore src/Fences6.App/Fences6.App.csproj
     
-    - name: Build Solution
-      run: dotnet build -c ${{ env.BUILD_CONFIGURATION }} --no-restore
-    
-    - name: Publish App
+    - name: Publish
       run: |
         dotnet publish src/Fences6.App/Fences6.App.csproj `
-          -c ${{ env.BUILD_CONFIGURATION }} `
+          -c Release `
           -r win-x64 `
           --self-contained true `
           -p:PublishSingleFile=true `
-          -o ./publish
+          -o ./dist
     
-    - name: List Output
-      run: Get-ChildItem ./publish
-    
-    - name: Upload Artifact
+    - name: Upload
       uses: actions/upload-artifact@v4
       with:
-        name: Fences6-win-x64
-        path: ./publish/Fences6.App.exe
-        retention-days: 30
-    
-    - name: Upload ZIP
-      if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
-      run: Compress-Archive -Path ./publish/* -DestinationPath ./Fences6.zip -Force
-    
-    - name: Release
-      if: startsWith(github.ref, 'refs/tags/v')
-      uses: softprops/action-gh-release@v2
-      with:
-        files: ./Fences6.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: Fences6
+        path: ./dist/Fences6.exe

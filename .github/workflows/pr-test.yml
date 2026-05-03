@@ -1,0 +1,127 @@
+name: Test Build
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ develop, feature/* ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet: ['6.0.x', '8.0.x']
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET ${{ matrix.dotnet }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ matrix.dotnet }}
+    
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ matrix.dotnet }}-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-${{ matrix.dotnet }}-
+          ${{ runner.os }}-nuget-
+    
+    - name: Restore NuGet packages
+      run: dotnet restore Fences6.sln
+    
+    - name: Build - Debug
+      run: dotnet build Fences6.sln -c Debug --no-restore
+    
+    - name: Build - Release
+      run: dotnet build Fences6.sln -c Release --no-restore
+    
+    - name: Publish Test
+      run: |
+        dotnet publish src/Fences6.App/Fences6.App.csproj `
+          -c Release `
+          -r win-x64 `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -o ./test-publish
+    
+    - name: Verify Executable
+      run: |
+        $exePath = "./test-publish/Fences6.App.exe"
+        if (Test-Path $exePath) {
+          $fileInfo = Get-Item $exePath
+          Write-Host "Executable found: $($fileInfo.Name)"
+          Write-Host "Size: $([math]::Round($fileInfo.Length / 1MB, 2)) MB"
+          Write-Host "Build successful!"
+        } else {
+          Write-Error "Executable not found at $exePath"
+          exit 1
+        }
+    
+    - name: Upload Test Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Fences6-test-${{ matrix.dotnet }}-win-x64
+        path: ./test-publish/Fences6.App.exe
+        retention-days: 3
+
+  code-quality:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore
+      run: dotnet restore Fences6.sln
+    
+    - name: Check formatting
+      run: |
+        dotnet format --verify-no-changes Fences6.sln --verbosity diagnostic
+      continue-on-error: true
+    
+    - name: Analyze code
+      run: |
+        dotnet build Fences6.sln -c Release --no-restore /p:TreatWarningsAsErrors=false /p:RunAnalyzers=true
+
+  native-build-test:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Check Native Project
+      id: check-native
+      run: |
+        if (Test-Path "./src/Fences6.Native/Fences6.Native.vcxproj") {
+          Write-Host "Native project found"
+          Write-Host "::set-output name=exists::true"
+        } else {
+          Write-Host "Native project not found"
+          Write-Host "::set-output name=exists::false"
+        }
+      shell: pwsh
+    
+    - name: Build Native Library
+      if: steps.check-native.outputs.exists == 'true'
+      shell: pwsh
+      run: |
+        MSBuild ./src/Fences6.Native/Fences6.Native.vcxproj `
+          -p:Configuration=Release `
+          -p:Platform=x64 `
+          -p:PlatformToolset=v143 `
+          -v:m
